@@ -16,7 +16,7 @@ spec:
         - env:
             - name: REDIS_URL
               value: redis://sleepless-redis:6379/0
-          image: hkccr.ccs.tencentyun.com/aysnine/sleepless:latest
+          image: ccr.ccs.tencentyun.com/aysnine/sleepless:latest
           name: sleepless
           resources:
             limits:

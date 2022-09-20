@@ -49,7 +49,7 @@ jobs:
       - name: Login to Tencent Registry
         uses: docker/login-action@v1
         with:
-          registry: hkccr.ccs.tencentyun.com
+          registry: ccr.ccs.tencentyun.com
           username: ${{ secrets.TENCENT_USERNAME }}
           password: ${{ secrets.TENCENT_TOKEN }}
       - name: Get Previous tag
@@ -63,8 +63,8 @@ jobs:
         with:
           push: true
           tags: |
-            hkccr.ccs.tencentyun.com/aysnine/sleepless:${{ steps.previousTag.outputs.tag }}
-            hkccr.ccs.tencentyun.com/aysnine/sleepless:latest
+            ccr.ccs.tencentyun.com/aysnine/sleepless:${{ steps.previousTag.outputs.tag }}
+            ccr.ccs.tencentyun.com/aysnine/sleepless:latest
       - run: |
           TAG=${{ steps.previousTag.outputs.tag }}
           echo $TAG
