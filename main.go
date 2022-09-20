@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Aysnine/sleepless-service/internal/bridge"
+	"github.com/Aysnine/sleepless-service/internal/redis"
 	"github.com/Aysnine/sleepless-service/internal/room"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
@@ -26,7 +26,7 @@ func init() {
 func main() {
 	app := fiber.New()
 	plaza := room.New()
-	rdc := bridge.New(redisURL)
+	rdc := redis.New(redisURL, 0)
 
 	app.Use("/ws", func(c *fiber.Ctx) error {
 		// IsWebSocketUpgrade returns true if the client
@@ -47,35 +47,37 @@ func main() {
 			if msg, err := member.Receive(); err != nil || member.IsKicked() {
 				break
 			} else {
-				plaza.Broadcast(msg)
+				go plaza.Broadcast(msg)
 			}
 		}
+
 		plaza.Leave(key)
 	}))
 
-	// * Shared Member
+	// * Redis Bridge
 	go func() {
 		channelName := "room:plaza"
 
 		pubsub := rdc.Subscribe(context.Background(), channelName)
 		defer pubsub.Close()
 
-		member := room.NewRedisMember(rdc, pubsub, channelName)
-		key := plaza.Join(member)
+		bridge := room.NewRedisBridge(rdc, pubsub, channelName)
+		plaza.SetBridge(bridge)
 
 		var (
 			msg []byte
 			err error
 		)
 		for {
-			if msg, err = member.Receive(); err != nil || member.IsKicked() {
+			if msg, err = bridge.Receive(); err != nil {
 				break
 			} else {
-				plaza.Delivery(msg, key)
+				go plaza.Delivery(msg)
 			}
 		}
-		plaza.Leave(key)
-		log.Fatalln("RedisError:", err)
+
+		plaza.RemoveBridge()
+		log.Fatalln("RedisBridgeError:", err)
 	}()
 
 	address := ":" + fmt.Sprint(port)
