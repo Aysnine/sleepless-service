@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/Aysnine/sleepless-service/internal/redis"
 	"github.com/Aysnine/sleepless-service/internal/room"
@@ -19,7 +20,13 @@ var redisURL string
 func init() {
 	flag.BoolVar(&dev, "dev", false, "local development mode")
 	flag.IntVar(&port, "port", 51339, "server start at port")
-	flag.StringVar(&redisURL, "redis", "redis://:6379/0", "redis url eg: redis://<user>:<password>@<host>:<port>/<db_number>")
+
+	defaultRedisURL := os.Getenv("REDIS_URL")
+	if len(defaultRedisURL) == 0 {
+		defaultRedisURL = "redis://:6379/0"
+	}
+	flag.StringVar(&redisURL, "redis", defaultRedisURL, "redis url eg: redis://<user>:<password>@<host>:<port>/<db_number>. or REDIS_URL environment variable")
+
 	flag.Parse()
 }
 
@@ -28,7 +35,7 @@ func main() {
 	plaza := room.New()
 	rdc := redis.New(redisURL, 0)
 
-	app.Use("/ws", func(c *fiber.Ctx) error {
+	app.Use("/funny/ws", func(c *fiber.Ctx) error {
 		// IsWebSocketUpgrade returns true if the client
 		// requested upgrade to the WebSocket protocol.
 		if websocket.IsWebSocketUpgrade(c) {
@@ -39,7 +46,7 @@ func main() {
 	})
 
 	// * Websocket Members
-	app.Get("/ws/public", websocket.New(func(conn *websocket.Conn) {
+	app.Get("/funny/ws/plaza", websocket.New(func(conn *websocket.Conn) {
 		member := room.NewWebSocketMember(conn)
 		key := plaza.Join(member)
 

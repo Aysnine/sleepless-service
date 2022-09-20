@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sleepless
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s-app: sleepless
+  template:
+    metadata:
+      labels:
+        k8s-app: sleepless
+    spec:
+      containers:
+        - env:
+            - name: REDIS_URL
+              value: redis://sleepless-redis:6379/0
+          image: hkccr.ccs.tencentyun.com/aysnine/sleepless:latest
+          name: sleepless
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+      imagePullSecrets:
+        - name: qcloudregistrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sleepless
+spec:
+  type: ClusterIP
+  ports:
+    - name: entry
+      port: 80
+      targetPort: 51339
+  selector:
+    k8s-app: sleepless
+  sessionAffinity: ClientIP
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sleepless
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`sleepless.cnine.d2.pub`)
+      kind: Rule
+      services:
+        - name: sleepless
+          port: entry
+      middlewares:
+        - name: sleepless-https-redirect-middleware
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: sleepless-https-redirect-middleware
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sleepless-tls
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`sleepless.cnine.d2.pub`)
+      kind: Rule
+      services:
+        - name: sleepless
+          port: entry
+  tls:
+    certResolver: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sleepless-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: sleepless-redis
+  template:
+    metadata:
+      labels:
+        k8s-app: sleepless-redis
+    spec:
+      containers:
+        - image: redis:6-alpine
+          name: sleepless-redis
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+      imagePullSecrets:
+        - name: qcloudregistrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sleepless-redis
+spec:
+  type: ClusterIP
+  ports:
+    - name: entry
+      port: 6379
+      targetPort: 6379
+  selector:
+    k8s-app: sleepless-redis
+  sessionAffinity: ClientIP

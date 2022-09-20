@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/go-redis/redis/v8"
@@ -23,6 +24,8 @@ func New(url string, db int) (client *redis.Client) {
 		log.Fatalln("RedisConnectError:", err)
 		return nil
 	}
+
+	fmt.Println("connected redis: ", opt.Addr, "/", opt.DB)
 
 	return client
 }
