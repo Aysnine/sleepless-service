@@ -1,21 +1,21 @@
-package room
+package channel
 
-type Room struct {
+type Channel struct {
 	increment int
 	members   map[int]Member
 	bridge    Bridge
 }
 
-func New() *Room {
-	room := &Room{
+func New() *Channel {
+	channel := &Channel{
 		increment: 0,
 		members:   make(map[int]Member),
 		bridge:    nil,
 	}
-	return room
+	return channel
 }
 
-func (r *Room) Join(m Member) int {
+func (r *Channel) Join(m Member) int {
 	key := r.increment + 1
 
 	r.increment = key
@@ -24,11 +24,11 @@ func (r *Room) Join(m Member) int {
 	return key
 }
 
-func (r *Room) Leave(key int) {
+func (r *Channel) Leave(key int) {
 	delete(r.members, key)
 }
 
-func (r *Room) Broadcast(msg []byte) {
+func (r *Channel) Broadcast(msg []byte) {
 	if r.bridge != nil {
 		r.bridge.Reply(msg)
 	} else {
@@ -36,16 +36,16 @@ func (r *Room) Broadcast(msg []byte) {
 	}
 }
 
-func (r *Room) Delivery(msg []byte) {
+func (r *Channel) Delivery(msg []byte) {
 	for _, member := range r.members {
 		go member.Reply(msg)
 	}
 }
 
-func (r *Room) SetBridge(bridge Bridge) {
+func (r *Channel) SetBridge(bridge Bridge) {
 	r.bridge = bridge
 }
 
-func (r *Room) RemoveBridge() {
+func (r *Channel) RemoveBridge() {
 	r.bridge = nil
 }

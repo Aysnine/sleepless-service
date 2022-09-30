@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/Aysnine/sleepless-service/internal/channel"
 	"github.com/Aysnine/sleepless-service/internal/redis"
-	"github.com/Aysnine/sleepless-service/internal/room"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )
@@ -32,7 +32,7 @@ func init() {
 
 func main() {
 	app := fiber.New()
-	plaza := room.New()
+	plaza := channel.New()
 	rdc := redis.New(redisURL, 0)
 
 	app.Use("/funny/ws", func(c *fiber.Ctx) error {
@@ -47,7 +47,7 @@ func main() {
 
 	// * Websocket Members
 	app.Get("/funny/ws/plaza", websocket.New(func(conn *websocket.Conn) {
-		member := room.NewWebSocketMember(conn)
+		member := channel.NewWebSocketMember(conn)
 		key := plaza.Join(member)
 
 		for {
@@ -63,12 +63,12 @@ func main() {
 
 	// * Redis Bridge
 	go func() {
-		channelName := "room:plaza"
+		channelName := "plaza"
 
 		pubsub := rdc.Subscribe(context.Background(), channelName)
 		defer pubsub.Close()
 
-		bridge := room.NewRedisBridge(rdc, pubsub, channelName)
+		bridge := channel.NewRedisBridge(rdc, pubsub, channelName)
 		plaza.SetBridge(bridge)
 
 		var (

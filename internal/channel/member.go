@@ -1,4 +1,4 @@
-package room
+package channel
 
 type Member interface {
 	Receive() (msg []byte, err error)
