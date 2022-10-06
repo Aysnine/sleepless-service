@@ -33,7 +33,11 @@ func init() {
 func main() {
 	app := fiber.New()
 	plaza := channel.New()
-	rdc := redis.New(redisURL, 0)
+	rdc, err := redis.New(redisURL, 0)
+
+	if err != nil {
+		log.Fatalln("NewRedisError", err)
+	}
 
 	app.Use("/funny/ws", func(c *fiber.Ctx) error {
 		// IsWebSocketUpgrade returns true if the client
