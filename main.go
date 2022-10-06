@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/Aysnine/sleepless-service/internal/channel"
-	"github.com/Aysnine/sleepless-service/internal/redis"
+	"github.com/Aysnine/sleepless-service/internal/platform/redis"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )
