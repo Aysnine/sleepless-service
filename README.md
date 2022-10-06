@@ -21,3 +21,11 @@ git commit -m "chore(release): $next_version" --allow-empty
 git tag $next_version
 git push origin --all && git push origin --tags
 ```
+
+## Maintain
+
+*How to upgrade deps?*
+
+```bash
+go get -u ./...
+```
