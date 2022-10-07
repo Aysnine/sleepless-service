@@ -67,7 +67,7 @@ func main() {
 		log.Fatalln("NewRedisError", err)
 	}
 
-	app.Static("/", "./public/qrcode.jpeg")
+	app.Static("/", "./public")
 
 	app.Post("/funny/wechat-mini-program-login", func(c *fiber.Ctx) error {
 		body := &struct {
