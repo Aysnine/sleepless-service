@@ -67,6 +67,8 @@ func main() {
 		log.Fatalln("NewRedisError", err)
 	}
 
+	app.Static("/", "./public/qrcode.jpeg")
+
 	app.Post("/funny/wechat-mini-program-login", func(c *fiber.Ctx) error {
 		body := &struct {
 			Code string `json:"code" validate:"required"`
