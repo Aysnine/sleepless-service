@@ -23,8 +23,8 @@ var wxAppSecret string
 
 func init() {
 
-	flag.StringVar(&wxAppId, "wx-app-id", wxAppId, "wechat mini program app id")
-	flag.StringVar(&wxAppSecret, "wx-app-secret", wxAppSecret, "wechat mini program app secret")
+	flag.StringVar(&wxAppId, "wx-app-id", "", "wechat mini program app id")
+	flag.StringVar(&wxAppSecret, "wx-app-secret", "", "wechat mini program app secret")
 
 	flag.BoolVar(&dev, "dev", false, "local development mode")
 	flag.IntVar(&port, "port", 51339, "server start at port")
