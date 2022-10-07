@@ -10,6 +10,7 @@ require (
 	github.com/fasthttp/websocket v1.5.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
+	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/onsi/gomega v1.20.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20220530130905-52f3993e8d6d // indirect
@@ -23,6 +24,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-resty/resty/v2 v2.7.0
+	github.com/gofiber/jwt/v3 v3.3.2
 	github.com/gofiber/websocket/v2 v2.1.0
 	github.com/klauspost/compress v1.15.11 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
