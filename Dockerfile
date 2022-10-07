@@ -17,7 +17,7 @@ FROM alpine
 WORKDIR /app
 
 COPY --from=build /app/main /app/main
-# COPY --from=build /app/public /app/public
+COPY --from=build /app/public /app/public
 
 EXPOSE 51339
 
