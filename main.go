@@ -120,9 +120,18 @@ func main() {
 		}
 
 		resp, err := wechatClient.JsCodeToSession(body.Code)
-		if err != nil {
+		if err != nil || resp.ErrCode != 0 {
+			var message string
+			if err != nil {
+				message = err.Error()
+			}
+			if resp.ErrCode != 0 {
+				message = "Third party service error"
+				fmt.Printf("wechatClient.JsCodeToSession(%s) -> %d: %s", body.Code, resp.ErrCode, resp.ErrMsg)
+			}
+
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"message": err.Error(),
+				"message": message,
 			})
 		}
 
