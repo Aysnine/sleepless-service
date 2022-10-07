@@ -16,6 +16,12 @@ spec:
         - env:
             - name: REDIS_URL
               value: redis://sleepless-redis:6379/0
+            - name: JWT_SECRET
+              value: #{JWT_SECRET}#
+            - name: WX_APP_ID
+              value: #{WX_APP_ID}#
+            - name: WX_APP_SECRET
+              value: #{WX_APP_SECRET}#
           image: ccr.ccs.tencentyun.com/aysnine/sleepless:latest
           name: sleepless
           resources:

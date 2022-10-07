@@ -71,6 +71,14 @@ jobs:
           sed -i -e "s/\:latest/\:${TAG}/g" ./deploy/d2-cloud.yml
           cat ./deploy/d2-cloud.yml
 
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["deploy/*.yml"]'
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          WX_APP_ID: ${{ secrets.WX_APP_ID }}
+          WX_APP_SECRET: ${{ secrets.WX_APP_SECRET }}
+
       - uses: actions-hub/kubectl@v1.21.2
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
