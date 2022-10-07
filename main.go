@@ -26,10 +26,6 @@ var wxAppSecret string
 var jwtSecret string
 
 func init() {
-	flag.StringVar(&jwtSecret, "jwt-secret", "SECRET", "JWT signing key")
-	flag.StringVar(&wxAppId, "wx-app-id", "", "wechat mini program app id")
-	flag.StringVar(&wxAppSecret, "wx-app-secret", "", "wechat mini program app secret")
-
 	flag.BoolVar(&dev, "dev", false, "local development mode")
 	flag.IntVar(&port, "port", 51339, "server start at port")
 
@@ -38,6 +34,24 @@ func init() {
 		defaultRedisURL = "redis://:6379/0"
 	}
 	flag.StringVar(&redisURL, "redis", defaultRedisURL, "redis url eg: redis://<user>:<password>@<host>:<port>/<db_number>. or REDIS_URL environment variable")
+
+	defaultJwtSecret := os.Getenv("JWT_SECRET")
+	if len(defaultJwtSecret) == 0 {
+		defaultJwtSecret = "SECRET"
+	}
+	flag.StringVar(&jwtSecret, "jwt-secret", defaultJwtSecret, "JWT signing key")
+
+	defaultWxAppId := os.Getenv("WX_APP_ID")
+	if len(defaultWxAppId) == 0 {
+		defaultWxAppId = "WX_APP_ID"
+	}
+	flag.StringVar(&wxAppId, "wx-app-id", defaultWxAppId, "wechat mini program app id")
+
+	defaultWxAppSecret := os.Getenv("WX_APP_SECRET")
+	if len(defaultWxAppSecret) == 0 {
+		defaultWxAppSecret = "WX_APP_SECRET"
+	}
+	flag.StringVar(&wxAppSecret, "wx-app-secret", defaultWxAppSecret, "wechat mini program app secret")
 
 	flag.Parse()
 }
