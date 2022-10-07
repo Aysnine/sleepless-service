@@ -9,7 +9,7 @@ Prepare:
 Start:
 
 ```bash
-go run ./main.go --dev --port 5001
+go run ./main.go --wx-app-id=xxx --wx-app-secret=xxx --dev --port 5001
 ```
 
 ## Release

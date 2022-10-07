@@ -9,6 +9,8 @@ import (
 
 	"github.com/Aysnine/sleepless-service/internal/channel"
 	"github.com/Aysnine/sleepless-service/internal/platform/redis"
+	"github.com/Aysnine/sleepless-service/internal/platform/wechat"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 )
@@ -16,8 +18,14 @@ import (
 var dev bool
 var port int
 var redisURL string
+var wxAppId string
+var wxAppSecret string
 
 func init() {
+
+	flag.StringVar(&wxAppId, "wx-app-id", wxAppId, "wechat mini program app id")
+	flag.StringVar(&wxAppSecret, "wx-app-secret", wxAppSecret, "wechat mini program app secret")
+
 	flag.BoolVar(&dev, "dev", false, "local development mode")
 	flag.IntVar(&port, "port", 51339, "server start at port")
 
@@ -90,6 +98,36 @@ func main() {
 		plaza.RemoveBridge()
 		log.Fatalln("RedisBridgeError:", err)
 	}()
+
+	validate := validator.New()
+	wechatClient := wechat.New(wxAppId, wxAppSecret)
+
+	app.Post("/funny/wechat-mini-program-login", func(c *fiber.Ctx) error {
+		body := &struct {
+			Code string `json:"code" validate:"required"`
+		}{}
+
+		if err := c.BodyParser(body); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": err.Error(),
+			})
+		}
+
+		if err := validate.Struct(body); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": err.Error(),
+			})
+		}
+
+		resp, err := wechatClient.JsCodeToSession(body.Code)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": err.Error(),
+			})
+		}
+
+		return c.JSON(resp)
+	})
 
 	address := ":" + fmt.Sprint(port)
 	if dev {
