@@ -2,13 +2,15 @@ package channel
 
 import (
 	"log"
+	"sync"
 
 	"github.com/gofiber/websocket/v2"
 )
 
 type WebSocketMember struct {
-	Kicked bool
-	Conn   *websocket.Conn
+	Kicked     bool
+	Conn       *websocket.Conn
+	writeMutex sync.Mutex
 }
 
 func (m *WebSocketMember) Receive() (msg []byte, err error) {
@@ -22,9 +24,15 @@ func (m *WebSocketMember) Receive() (msg []byte, err error) {
 }
 
 func (m *WebSocketMember) Reply(msg []byte) {
-	if err := m.Conn.WriteMessage(websocket.TextMessage, msg); err != nil {
-		log.Println("WriteMessageError:", err)
+	// ! Avoid WebSocket Concurrent Write
+
+	m.writeMutex.Lock()
+	{
+		if err := m.Conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+			log.Println("WriteMessageError:", err)
+		}
 	}
+	m.writeMutex.Unlock()
 }
 
 func (m *WebSocketMember) Kick() {
