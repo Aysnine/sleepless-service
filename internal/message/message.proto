@@ -1,0 +1,42 @@
+syntax = 'proto3';
+
+package message;
+
+option go_package = './message';
+
+message PublicMessage {
+  message Join { int32 tid = 1; }
+  message Leave { int32 tid = 1; }
+
+  message Move {
+    int32 tid = 1;
+    int32 x = 2;
+    int32 y = 3;
+  }
+
+  message LieDown {
+    int32 tid = 1;
+    int32 bed = 2;
+  }
+
+  oneof action {
+    Join join = 4;
+    Leave leave = 5;
+    Move move = 6;
+    LieDown lie_down = 7;
+  }
+}
+
+message UpcomingMessage {
+  message Move {
+    int32 x = 1;
+    int32 y = 2;
+  }
+
+  message LieDown { int32 bed = 1; }
+
+  oneof action {
+    Move move = 3;
+    LieDown lie_down = 4;
+  }
+}

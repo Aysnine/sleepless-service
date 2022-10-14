@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/Aysnine/sleepless-service/internal/channel"
+	"github.com/Aysnine/sleepless-service/internal/message"
 	"github.com/Aysnine/sleepless-service/internal/platform/redis"
 	"github.com/Aysnine/sleepless-service/internal/platform/wechat"
 	"github.com/go-playground/validator/v10"
@@ -16,6 +17,7 @@ import (
 	jwtWare "github.com/gofiber/jwt/v3"
 	"github.com/gofiber/websocket/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"google.golang.org/protobuf/proto"
 )
 
 var dev bool
@@ -152,15 +154,70 @@ func main() {
 		member := channel.NewWebSocketMember(conn)
 		key := plaza.Join(member)
 
+		var tid int32 = int32(1) // TODO replace to target id
+
+		if msgJoin, err := proto.Marshal(
+			&message.PublicMessage_Leave{Tid: tid},
+		); err != nil {
+			// TODO ignore log
+			fmt.Println("ProtoBufferMarshalError", err.Error())
+		} else {
+			go plaza.Broadcast(msgJoin)
+		}
+
 		for {
 			if msg, err := member.Receive(); err != nil || member.IsKicked() {
 				break
 			} else {
-				go plaza.Broadcast(msg)
+				upcomingMsg := message.UpcomingMessage{}
+
+				if err := proto.Unmarshal(msg, &upcomingMsg); err != nil {
+					// TODO ignore log
+					// TODO mark count for kick
+					fmt.Println("ProtoBufferUnmarshalError", err.Error())
+				} else {
+					msg = []byte{}
+
+					switch upcomingMsg.Action.(type) {
+					case *message.UpcomingMessage_Move_:
+						if msg, err = proto.Marshal(
+							&message.PublicMessage_Move{
+								Tid: tid,
+								X:   upcomingMsg.GetMove().X,
+								Y:   upcomingMsg.GetMove().Y,
+							},
+						); err != nil {
+							fmt.Println("ProtoBufferMarshalError", err.Error())
+						}
+					case *message.UpcomingMessage_LieDown_:
+						if msg, err = proto.Marshal(
+							&message.PublicMessage_LieDown{
+								Tid: tid,
+								Bed: upcomingMsg.GetLieDown().Bed,
+							},
+						); err != nil {
+							fmt.Println("ProtoBufferMarshalError", err.Error())
+						}
+					default:
+						// TODO ignore log
+						// TODO mark count for kick
+						fmt.Println("No matching UpcomingMessage")
+					}
+
+					go plaza.Broadcast(msg)
+				}
 			}
 		}
 
 		plaza.Leave(key)
+
+		if msgLeave, err := proto.Marshal(
+			&message.PublicMessage_Leave{Tid: tid},
+		); err != nil {
+			fmt.Println("ProtoBufferMarshalError", err.Error())
+		} else {
+			go plaza.Broadcast(msgLeave)
+		}
 	}))
 
 	// * Redis Bridge
