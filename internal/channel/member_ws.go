@@ -28,7 +28,7 @@ func (m *WebSocketMember) Reply(msg []byte) {
 
 	m.writeMutex.Lock()
 	{
-		if err := m.Conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+		if err := m.Conn.WriteMessage(websocket.BinaryMessage, msg); err != nil {
 			log.Println("WriteMessageError:", err)
 		}
 	}
