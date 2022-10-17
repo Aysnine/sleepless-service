@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"time"
 
@@ -154,10 +155,16 @@ func main() {
 		member := channel.NewWebSocketMember(conn)
 		key := plaza.Join(member)
 
-		var tid int32 = int32(1) // TODO replace to target id
+		var tid int32 = int32(rand.Intn(100)) // TODO replace to target id
 
 		if msgJoin, err := proto.Marshal(
-			&message.PublicMessage_Join{Tid: tid},
+			&message.PublicMessage{
+				Action: &message.PublicMessage_Join_{
+					Join: &message.PublicMessage_Join{
+						Tid: tid,
+					},
+				},
+			},
 		); err != nil {
 			// TODO ignore log
 			fmt.Println("ProtoBufferMarshalError", err.Error())
@@ -181,10 +188,14 @@ func main() {
 					switch upcomingMsg.Action.(type) {
 					case *message.UpcomingMessage_Move_:
 						if msg, err = proto.Marshal(
-							&message.PublicMessage_Move{
-								Tid: tid,
-								X:   upcomingMsg.GetMove().X,
-								Y:   upcomingMsg.GetMove().Y,
+							&message.PublicMessage{
+								Action: &message.PublicMessage_Move_{
+									Move: &message.PublicMessage_Move{
+										Tid: tid,
+										X:   upcomingMsg.GetMove().X,
+										Y:   upcomingMsg.GetMove().Y,
+									},
+								},
 							},
 						); err != nil {
 							fmt.Println("ProtoBufferMarshalError", err.Error())
@@ -212,7 +223,13 @@ func main() {
 		plaza.Leave(key)
 
 		if msgLeave, err := proto.Marshal(
-			&message.PublicMessage_Leave{Tid: tid},
+			&message.PublicMessage{
+				Action: &message.PublicMessage_Leave_{
+					Leave: &message.PublicMessage_Leave{
+						Tid: tid,
+					},
+				},
+			},
 		); err != nil {
 			fmt.Println("ProtoBufferMarshalError", err.Error())
 		} else {
