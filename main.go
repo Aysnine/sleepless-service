@@ -157,7 +157,7 @@ func main() {
 		var tid int32 = int32(1) // TODO replace to target id
 
 		if msgJoin, err := proto.Marshal(
-			&message.PublicMessage_Leave{Tid: tid},
+			&message.PublicMessage_Join{Tid: tid},
 		); err != nil {
 			// TODO ignore log
 			fmt.Println("ProtoBufferMarshalError", err.Error())
