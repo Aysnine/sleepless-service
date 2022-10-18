@@ -172,15 +172,24 @@ func main() {
 			go plaza.Broadcast(msgJoin)
 		}
 
+		exceptionCounter := 0
+
 		for {
-			if msg, err := member.Receive(); err != nil || member.IsKicked() {
+			if member.IsKicked() || exceptionCounter > 64 {
 				break
+			}
+
+			if msg, err := member.Receive(); err != nil {
+				exceptionCounter += 1
+
+				// fmt.Println("WsMemberReceiveError", err.Error())
 			} else {
 				upcomingMsg := message.UpcomingMessage{}
 
 				if err := proto.Unmarshal(msg, &upcomingMsg); err != nil {
+					exceptionCounter += 1
+
 					// TODO ignore log
-					// TODO mark count for kick
 					fmt.Println("ProtoBufferUnmarshalError", err.Error())
 				} else {
 					msg = []byte{}
@@ -198,6 +207,9 @@ func main() {
 								},
 							},
 						); err != nil {
+							exceptionCounter += 1
+
+							// TODO ignore log
 							fmt.Println("ProtoBufferMarshalError", err.Error())
 						}
 					case *message.UpcomingMessage_LieDown_:
@@ -211,15 +223,21 @@ func main() {
 								},
 							},
 						); err != nil {
+							exceptionCounter += 1
+
+							// TODO ignore log
 							fmt.Println("ProtoBufferMarshalError", err.Error())
 						}
 					default:
+						exceptionCounter += 1
+
 						// TODO ignore log
-						// TODO mark count for kick
 						fmt.Println("No matching UpcomingMessage")
 					}
 
-					go plaza.Broadcast(msg)
+					if len(msg) > 0 {
+						go plaza.Broadcast(msg)
+					}
 				}
 			}
 		}
