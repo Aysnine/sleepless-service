@@ -202,9 +202,13 @@ func main() {
 						}
 					case *message.UpcomingMessage_LieDown_:
 						if msg, err = proto.Marshal(
-							&message.PublicMessage_LieDown{
-								Tid: tid,
-								Bed: upcomingMsg.GetLieDown().Bed,
+							&message.PublicMessage{
+								Action: &message.PublicMessage_LieDown_{
+									LieDown: &message.PublicMessage_LieDown{
+										Tid: tid,
+										Bed: upcomingMsg.GetLieDown().Bed,
+									},
+								},
 							},
 						); err != nil {
 							fmt.Println("ProtoBufferMarshalError", err.Error())
