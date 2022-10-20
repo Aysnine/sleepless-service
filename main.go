@@ -67,7 +67,7 @@ func main() {
 	wechatClient := wechat.New(wxAppId, wxAppSecret)
 
 	if err != nil {
-		log.Fatalln("NewRedisError", err)
+		log.Fatalln("NewRedisError", err.Error())
 	}
 
 	app.Static("/", "./public")
@@ -282,7 +282,7 @@ func main() {
 		}
 
 		plaza.RemoveBridge()
-		log.Fatalln("RedisBridgeError:", err)
+		log.Fatalln("RedisBridgeError:", err.Error())
 	}()
 
 	address := ":" + fmt.Sprint(port)
