@@ -155,7 +155,7 @@ func main() {
 		member := channel.NewWebSocketMember(conn)
 		key := plaza.Join(member)
 
-		var tid int32 = int32(rand.Intn(100)) // TODO replace to target id
+		var tid int32 = int32(rand.Intn(10000)) // TODO replace to target id
 
 		if msgJoin, err := proto.Marshal(
 			&message.PublicMessage{
