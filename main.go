@@ -5,8 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/Aysnine/sleepless-service/internal/channel"
@@ -116,6 +116,9 @@ func main() {
 			"sessionKey": resp.SessionKey,
 			"unionId":    resp.UnionId,
 
+			// ! common key
+			"memberId": resp.OpenId,
+
 			// ! special key 'exp'
 			"exp": time.Now().Add(expireInterval).Unix(),
 		}
@@ -150,12 +153,54 @@ func main() {
 		return fiber.ErrUpgradeRequired
 	})
 
+	plazaKey := "room:plaza"
+	plazaTidCounterKey := plazaKey + ":tid-counter"
+	plazaTidStart := "0"
+
+	// TODO support expiration when service instance to zero
+	if err := rdc.SetNX(context.Background(), plazaTidCounterKey, plazaTidStart, 0).Err(); err != nil {
+		log.Fatalln("RedisSetNXError", err.Error())
+	}
+
 	// * Websocket Members
 	app.Get("/funny/ws/plaza", websocket.New(func(conn *websocket.Conn) {
+		user := conn.Locals("user").(*jwt.Token)
+		claims := user.Claims.(jwt.MapClaims)
+		memberId := claims["memberId"].(string)
+
+		memberKey := plazaKey + ":member:" + memberId
+		tidFieldName := "tid"
+
+		tid := int32(-1)
+
+		if existedTid, err := rdc.HGet(context.Background(), memberKey, tidFieldName).Result(); err != nil && err != redis.Nil {
+			fmt.Println("RedisHGetError", err.Error())
+		} else {
+			if len(existedTid) == 0 {
+				if newTid, err := rdc.Incr(context.Background(), plazaTidCounterKey).Result(); err != nil {
+					fmt.Println("RedisIncrError", err.Error())
+				} else {
+					if err := rdc.HSetNX(context.Background(), memberKey, tidFieldName, newTid).Err(); err != nil {
+						fmt.Println("RedisHSetNXError", err.Error())
+					} else {
+						tid = int32(newTid)
+					}
+				}
+			} else {
+				if i64, err := strconv.ParseInt(existedTid, 10, 32); err != nil {
+					fmt.Println("ParseIntError", existedTid, err.Error())
+				} else {
+					tid = int32(i64)
+				}
+			}
+		}
+
+		if tid == -1 {
+			return
+		}
+
 		member := channel.NewWebSocketMember(conn)
 		key := plaza.Join(member)
-
-		var tid int32 = int32(rand.Intn(10000)) // TODO replace to target id
 
 		if msgJoin, err := proto.Marshal(
 			&message.PublicMessage{
@@ -261,12 +306,10 @@ func main() {
 
 	// * Redis Bridge
 	go func() {
-		channelName := "plaza"
-
-		pubsub := rdc.Subscribe(context.Background(), channelName)
+		pubsub := rdc.Subscribe(context.Background(), plazaKey)
 		defer pubsub.Close()
 
-		bridge := channel.NewRedisBridge(rdc, pubsub, channelName)
+		bridge := channel.NewRedisBridge(rdc, pubsub, plazaKey)
 		plaza.SetBridge(bridge)
 
 		var (

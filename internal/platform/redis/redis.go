@@ -6,6 +6,8 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+var Nil = redis.Nil
+
 func New(url string, db int) (client *redis.Client, err error) {
 	opt, err := redis.ParseURL(url)
 
