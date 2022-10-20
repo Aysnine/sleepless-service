@@ -282,7 +282,7 @@ func main() {
 		}
 
 		plaza.RemoveBridge()
-		log.Fatalln("RedisBridgeError:", err.Error())
+		log.Fatalln("RedisBridgeError", err.Error())
 	}()
 
 	address := ":" + fmt.Sprint(port)

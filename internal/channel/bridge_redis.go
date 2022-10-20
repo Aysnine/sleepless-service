@@ -20,7 +20,7 @@ func (m *RedisBridge) Receive() (msg []byte, err error) {
 
 func (m *RedisBridge) Reply(msg []byte) {
 	if err := m.Client.Publish(context.Background(), m.ChannelName, msg).Err(); err != nil {
-		log.Println("RedisPublishError:", err.Error(), m.ChannelName)
+		log.Println("RedisPublishError", err.Error(), m.ChannelName)
 	}
 }
 

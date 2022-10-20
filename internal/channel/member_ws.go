@@ -16,7 +16,7 @@ type WebSocketMember struct {
 func (m *WebSocketMember) Receive() (msg []byte, err error) {
 	if _, msg, err = m.Conn.ReadMessage(); err != nil {
 		if !websocket.IsUnexpectedCloseError(err) {
-			log.Println("UnexpectedCloseError:", err.Error())
+			log.Println("UnexpectedCloseError", err.Error())
 		}
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (m *WebSocketMember) Reply(msg []byte) {
 	m.writeMutex.Lock()
 	{
 		if err := m.Conn.WriteMessage(websocket.BinaryMessage, msg); err != nil {
-			log.Println("WriteMessageError:", err.Error())
+			log.Println("WriteMessageError", err.Error())
 		}
 	}
 	m.writeMutex.Unlock()
