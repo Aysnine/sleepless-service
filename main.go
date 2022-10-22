@@ -135,7 +135,7 @@ func main() {
 		return c.JSON(fiber.Map{"token": t})
 	})
 
-	app.Use(jwtWare.New(jwtWare.Config{
+	app.Use("/funny", jwtWare.New(jwtWare.Config{
 		SigningKey: []byte(jwtSecret),
 	}))
 
