@@ -10,7 +10,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "main.go",
-      "args": ["--dev", "--port=5001", "--wx-app-id=xxx", "--wx-app-secret=xxx"]
+      "args": ["--dev", "--port=5001", "--wx-app-id=xxx", "--wx-app-secret=xxx", "--jwt-secret=xxx"]
     }
   ]
 }
