@@ -19,11 +19,16 @@ message PublicMessage {
     int32 bed = 2;
   }
 
+  message Underlay {
+    int32 tid = 1;
+  }
+
   oneof action {
     Join join = 4;
     Leave leave = 5;
     Move move = 6;
     LieDown lie_down = 7;
+    Underlay underlay = 8;
   }
 }
 
@@ -39,8 +44,4 @@ message UpcomingMessage {
     Move move = 3;
     LieDown lie_down = 4;
   }
-}
-
-message UnderlayMessage  {
-  int32 selfTid = 1;
 }

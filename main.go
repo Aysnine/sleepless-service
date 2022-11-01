@@ -203,8 +203,12 @@ func main() {
 		key := plaza.Join(member)
 
 		if msgUnderlay, err := proto.Marshal(
-			&message.UnderlayMessage{
-				SelfTid: tid,
+			&message.PublicMessage{
+				Action: &message.PublicMessage_Underlay_{
+					Underlay: &message.PublicMessage_Underlay{
+						Tid: tid,
+					},
+				},
 			},
 		); err != nil {
 			// TODO ignore log
