@@ -208,6 +208,53 @@ func (*UpcomingMessage_Move_) isUpcomingMessage_Action() {}
 
 func (*UpcomingMessage_LieDown_) isUpcomingMessage_Action() {}
 
+type UnderlayMessage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SelfTid int32 `protobuf:"varint,1,opt,name=selfTid,proto3" json:"selfTid,omitempty"`
+}
+
+func (x *UnderlayMessage) Reset() {
+	*x = UnderlayMessage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_message_message_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UnderlayMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnderlayMessage) ProtoMessage() {}
+
+func (x *UnderlayMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_message_message_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnderlayMessage.ProtoReflect.Descriptor instead.
+func (*UnderlayMessage) Descriptor() ([]byte, []int) {
+	return file_internal_message_message_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *UnderlayMessage) GetSelfTid() int32 {
+	if x != nil {
+		return x.SelfTid
+	}
+	return 0
+}
+
 type PublicMessage_Join struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -219,7 +266,7 @@ type PublicMessage_Join struct {
 func (x *PublicMessage_Join) Reset() {
 	*x = PublicMessage_Join{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_message_message_proto_msgTypes[2]
+		mi := &file_internal_message_message_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -232,7 +279,7 @@ func (x *PublicMessage_Join) String() string {
 func (*PublicMessage_Join) ProtoMessage() {}
 
 func (x *PublicMessage_Join) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_message_message_proto_msgTypes[2]
+	mi := &file_internal_message_message_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -266,7 +313,7 @@ type PublicMessage_Leave struct {
 func (x *PublicMessage_Leave) Reset() {
 	*x = PublicMessage_Leave{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_message_message_proto_msgTypes[3]
+		mi := &file_internal_message_message_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -279,7 +326,7 @@ func (x *PublicMessage_Leave) String() string {
 func (*PublicMessage_Leave) ProtoMessage() {}
 
 func (x *PublicMessage_Leave) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_message_message_proto_msgTypes[3]
+	mi := &file_internal_message_message_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -315,7 +362,7 @@ type PublicMessage_Move struct {
 func (x *PublicMessage_Move) Reset() {
 	*x = PublicMessage_Move{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_message_message_proto_msgTypes[4]
+		mi := &file_internal_message_message_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -328,7 +375,7 @@ func (x *PublicMessage_Move) String() string {
 func (*PublicMessage_Move) ProtoMessage() {}
 
 func (x *PublicMessage_Move) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_message_message_proto_msgTypes[4]
+	mi := &file_internal_message_message_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -377,7 +424,7 @@ type PublicMessage_LieDown struct {
 func (x *PublicMessage_LieDown) Reset() {
 	*x = PublicMessage_LieDown{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_message_message_proto_msgTypes[5]
+		mi := &file_internal_message_message_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -390,7 +437,7 @@ func (x *PublicMessage_LieDown) String() string {
 func (*PublicMessage_LieDown) ProtoMessage() {}
 
 func (x *PublicMessage_LieDown) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_message_message_proto_msgTypes[5]
+	mi := &file_internal_message_message_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +479,7 @@ type UpcomingMessage_Move struct {
 func (x *UpcomingMessage_Move) Reset() {
 	*x = UpcomingMessage_Move{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_message_message_proto_msgTypes[6]
+		mi := &file_internal_message_message_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -445,7 +492,7 @@ func (x *UpcomingMessage_Move) String() string {
 func (*UpcomingMessage_Move) ProtoMessage() {}
 
 func (x *UpcomingMessage_Move) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_message_message_proto_msgTypes[6]
+	mi := &file_internal_message_message_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -486,7 +533,7 @@ type UpcomingMessage_LieDown struct {
 func (x *UpcomingMessage_LieDown) Reset() {
 	*x = UpcomingMessage_LieDown{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_message_message_proto_msgTypes[7]
+		mi := &file_internal_message_message_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -499,7 +546,7 @@ func (x *UpcomingMessage_LieDown) String() string {
 func (*UpcomingMessage_LieDown) ProtoMessage() {}
 
 func (x *UpcomingMessage_LieDown) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_message_message_proto_msgTypes[7]
+	mi := &file_internal_message_message_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -565,8 +612,11 @@ var file_internal_message_message_proto_rawDesc = []byte{
 	0x01, 0x28, 0x02, 0x52, 0x01, 0x78, 0x12, 0x0c, 0x0a, 0x01, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28,
 	0x02, 0x52, 0x01, 0x79, 0x1a, 0x1b, 0x0a, 0x07, 0x4c, 0x69, 0x65, 0x44, 0x6f, 0x77, 0x6e, 0x12,
 	0x10, 0x0a, 0x03, 0x62, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x03, 0x62, 0x65,
-	0x64, 0x42, 0x08, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0b, 0x5a, 0x09, 0x2e,
-	0x2f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x64, 0x42, 0x08, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x2b, 0x0a, 0x0f, 0x55,
+	0x6e, 0x64, 0x65, 0x72, 0x6c, 0x61, 0x79, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x18,
+	0x0a, 0x07, 0x73, 0x65, 0x6c, 0x66, 0x54, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x07, 0x73, 0x65, 0x6c, 0x66, 0x54, 0x69, 0x64, 0x42, 0x0b, 0x5a, 0x09, 0x2e, 0x2f, 0x6d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -581,24 +631,25 @@ func file_internal_message_message_proto_rawDescGZIP() []byte {
 	return file_internal_message_message_proto_rawDescData
 }
 
-var file_internal_message_message_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_internal_message_message_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_internal_message_message_proto_goTypes = []interface{}{
 	(*PublicMessage)(nil),           // 0: message.PublicMessage
 	(*UpcomingMessage)(nil),         // 1: message.UpcomingMessage
-	(*PublicMessage_Join)(nil),      // 2: message.PublicMessage.Join
-	(*PublicMessage_Leave)(nil),     // 3: message.PublicMessage.Leave
-	(*PublicMessage_Move)(nil),      // 4: message.PublicMessage.Move
-	(*PublicMessage_LieDown)(nil),   // 5: message.PublicMessage.LieDown
-	(*UpcomingMessage_Move)(nil),    // 6: message.UpcomingMessage.Move
-	(*UpcomingMessage_LieDown)(nil), // 7: message.UpcomingMessage.LieDown
+	(*UnderlayMessage)(nil),         // 2: message.UnderlayMessage
+	(*PublicMessage_Join)(nil),      // 3: message.PublicMessage.Join
+	(*PublicMessage_Leave)(nil),     // 4: message.PublicMessage.Leave
+	(*PublicMessage_Move)(nil),      // 5: message.PublicMessage.Move
+	(*PublicMessage_LieDown)(nil),   // 6: message.PublicMessage.LieDown
+	(*UpcomingMessage_Move)(nil),    // 7: message.UpcomingMessage.Move
+	(*UpcomingMessage_LieDown)(nil), // 8: message.UpcomingMessage.LieDown
 }
 var file_internal_message_message_proto_depIdxs = []int32{
-	2, // 0: message.PublicMessage.join:type_name -> message.PublicMessage.Join
-	3, // 1: message.PublicMessage.leave:type_name -> message.PublicMessage.Leave
-	4, // 2: message.PublicMessage.move:type_name -> message.PublicMessage.Move
-	5, // 3: message.PublicMessage.lie_down:type_name -> message.PublicMessage.LieDown
-	6, // 4: message.UpcomingMessage.move:type_name -> message.UpcomingMessage.Move
-	7, // 5: message.UpcomingMessage.lie_down:type_name -> message.UpcomingMessage.LieDown
+	3, // 0: message.PublicMessage.join:type_name -> message.PublicMessage.Join
+	4, // 1: message.PublicMessage.leave:type_name -> message.PublicMessage.Leave
+	5, // 2: message.PublicMessage.move:type_name -> message.PublicMessage.Move
+	6, // 3: message.PublicMessage.lie_down:type_name -> message.PublicMessage.LieDown
+	7, // 4: message.UpcomingMessage.move:type_name -> message.UpcomingMessage.Move
+	8, // 5: message.UpcomingMessage.lie_down:type_name -> message.UpcomingMessage.LieDown
 	6, // [6:6] is the sub-list for method output_type
 	6, // [6:6] is the sub-list for method input_type
 	6, // [6:6] is the sub-list for extension type_name
@@ -637,7 +688,7 @@ func file_internal_message_message_proto_init() {
 			}
 		}
 		file_internal_message_message_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PublicMessage_Join); i {
+			switch v := v.(*UnderlayMessage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -649,7 +700,7 @@ func file_internal_message_message_proto_init() {
 			}
 		}
 		file_internal_message_message_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PublicMessage_Leave); i {
+			switch v := v.(*PublicMessage_Join); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -661,7 +712,7 @@ func file_internal_message_message_proto_init() {
 			}
 		}
 		file_internal_message_message_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PublicMessage_Move); i {
+			switch v := v.(*PublicMessage_Leave); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -673,7 +724,7 @@ func file_internal_message_message_proto_init() {
 			}
 		}
 		file_internal_message_message_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PublicMessage_LieDown); i {
+			switch v := v.(*PublicMessage_Move); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -685,7 +736,7 @@ func file_internal_message_message_proto_init() {
 			}
 		}
 		file_internal_message_message_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpcomingMessage_Move); i {
+			switch v := v.(*PublicMessage_LieDown); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -697,6 +748,18 @@ func file_internal_message_message_proto_init() {
 			}
 		}
 		file_internal_message_message_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpcomingMessage_Move); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_message_message_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpcomingMessage_LieDown); i {
 			case 0:
 				return &v.state
@@ -725,7 +788,7 @@ func file_internal_message_message_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_message_message_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

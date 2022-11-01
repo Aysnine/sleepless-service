@@ -40,3 +40,7 @@ message UpcomingMessage {
     LieDown lie_down = 4;
   }
 }
+
+message UnderlayMessage  {
+  int32 selfTid = 1;
+}

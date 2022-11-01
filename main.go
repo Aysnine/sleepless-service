@@ -202,6 +202,17 @@ func main() {
 		member := channel.NewWebSocketMember(conn)
 		key := plaza.Join(member)
 
+		if msgUnderlay, err := proto.Marshal(
+			&message.UnderlayMessage{
+				SelfTid: tid,
+			},
+		); err != nil {
+			// TODO ignore log
+			fmt.Println("ProtoBufferMarshalError", err.Error())
+		} else {
+			go member.Reply(msgUnderlay)
+		}
+
 		if msgJoin, err := proto.Marshal(
 			&message.PublicMessage{
 				Action: &message.PublicMessage_Join_{
