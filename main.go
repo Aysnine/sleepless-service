@@ -213,6 +213,7 @@ func main() {
 		); err != nil {
 			// TODO ignore log
 			fmt.Println("ProtoBufferMarshalError", err.Error())
+			return
 		} else {
 			go member.Reply(msgUnderlay)
 		}
@@ -228,6 +229,7 @@ func main() {
 		); err != nil {
 			// TODO ignore log
 			fmt.Println("ProtoBufferMarshalError", err.Error())
+			return
 		} else {
 			go plaza.Broadcast(msgJoin)
 		}
