@@ -200,7 +200,6 @@ func main() {
 		}
 
 		member := channel.NewWebSocketMember(conn)
-		key := plaza.Join(member)
 
 		if msgUnderlay, err := proto.Marshal(
 			&message.PublicMessage{
@@ -233,6 +232,8 @@ func main() {
 		} else {
 			go plaza.Broadcast(msgJoin)
 		}
+
+		key := plaza.Join(member)
 
 		exceptionCounter := 0
 
