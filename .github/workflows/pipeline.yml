@@ -46,12 +46,11 @@ jobs:
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Login to Tencent Registry
+      - name: Login to Docker Hub Private Registry
         uses: docker/login-action@v1
         with:
-          registry: ccr.ccs.tencentyun.com
-          username: ${{ secrets.TENCENT_USERNAME }}
-          password: ${{ secrets.TENCENT_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Get Previous tag
         id: previousTag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
@@ -63,13 +62,13 @@ jobs:
         with:
           push: true
           tags: |
-            ccr.ccs.tencentyun.com/aysnine/sleepless:${{ steps.previousTag.outputs.tag }}
-            ccr.ccs.tencentyun.com/aysnine/sleepless:latest
+            aysnine/sleepless:${{ steps.previousTag.outputs.tag }}
+            aysnine/sleepless:latest
       - run: |
           TAG=${{ steps.previousTag.outputs.tag }}
           echo $TAG
-          sed -i -e "s/\:latest/\:${TAG}/g" ./deploy/d2-cloud.yml
-          cat ./deploy/d2-cloud.yml
+          sed -i -e "s/\:latest/\:${TAG}/g" ./deploy/cls-softfunny.yml
+          cat ./deploy/cls-softfunny.yml
 
       - uses: cschleiden/replace-tokens@v1
         with:
@@ -83,4 +82,4 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          args: apply -f ./deploy/d2-cloud.yml
+          args: apply -f ./deploy/cls-softfunny.yml

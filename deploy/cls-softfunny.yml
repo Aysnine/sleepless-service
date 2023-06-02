@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: sleepless
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       k8s-app: sleepless
@@ -22,7 +22,7 @@ spec:
               value: #{WX_APP_ID}#
             - name: WX_APP_SECRET
               value: #{WX_APP_SECRET}#
-          image: ccr.ccs.tencentyun.com/aysnine/sleepless:latest
+          image: aysnine/sleepless:latest
           name: sleepless
           resources:
             limits:
@@ -32,7 +32,7 @@ spec:
               cpu: 10m
               memory: 64Mi
       imagePullSecrets:
-        - name: qcloudregistrykey
+        - name: private-docker-hub
 ---
 apiVersion: v1
 kind: Service
@@ -113,8 +113,6 @@ spec:
             requests:
               cpu: 10m
               memory: 64Mi
-      imagePullSecrets:
-        - name: qcloudregistrykey
 ---
 apiVersion: v1
 kind: Service
